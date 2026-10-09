@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pickup Play</string>
+
+    <!-- Screen titles (toolbar) -->
+    <string name="title_sport_picker">Pickup Play</string>
+    <string name="title_session_list">Pickup sessions</string>
+    <string name="title_session_detail">Session details</string>
+    <string name="title_create_session">Create a session</string>
+
+    <!-- Sport picker -->
+    <string name="picker_heading">What do you want to play?</string>
+    <string name="picker_subheading">Pick a sport to see open pickup sessions around campus.</string>
+    <string name="cd_sport_card">%1$s, %2$s</string>
+    <plurals name="open_sessions_count">
+        <item quantity="one">%d open session</item>
+        <item quantity="other">%d open sessions</item>
+    </plurals>
+
+    <!-- Sports -->
+    <string name="sport_basketball">Basketball</string>
+    <string name="sport_soccer">Soccer</string>
+    <string name="sport_volleyball">Volleyball</string>
+    <string name="sport_tennis">Tennis</string>
+    <string name="sport_ultimate">Ultimate Frisbee</string>
+    <string name="sport_pickleball">Pickleball</string>
+    <string name="emoji_basketball" translatable="false">🏀</string>
+    <string name="emoji_soccer" translatable="false">⚽</string>
+    <string name="emoji_volleyball" translatable="false">🏐</string>
+    <string name="emoji_tennis" translatable="false">🎾</string>
+    <string name="emoji_ultimate" translatable="false">🥏</string>
+    <string name="emoji_pickleball" translatable="false">🏓</string>
+    <string name="sport_with_emoji">%1$s  %2$s</string>
+
+    <!-- Session list -->
+    <string name="sessions_header">%1$s  %2$s sessions</string>
+    <string name="sessions_empty">No %1$s sessions yet. Be the first to create one.</string>
+    <string name="button_create_session">Create session</string>
+    <string name="session_created">Session created. You\'re hosting.</string>
+    <string name="view">View</string>
+    <string name="cd_session_card">%1$s at %2$s, %3$s, %4$s</string>
+
+    <!-- Shared session formatting -->
+    <string name="when_format">%1$s · %2$s</string>
+    <string name="players_format">%1$d / %2$d players</string>
+    <string name="badge_hosting">Hosting</string>
+    <string name="badge_joined">Joined</string>
+    <string name="badge_full">Full</string>
+
+    <!-- Days, times, skill levels -->
+    <string name="day_today">Today</string>
+    <string name="day_tomorrow">Tomorrow</string>
+    <string name="day_saturday">Saturday</string>
+    <string name="day_sunday">Sunday</string>
+    <string name="time_morning">Morning</string>
+    <string name="time_afternoon">Afternoon</string>
+    <string name="time_evening">Evening</string>
+    <string name="time_morning_range">9–11 AM</string>
+    <string name="time_afternoon_range">1–3 PM</string>
+    <string name="time_evening_range">6–8 PM</string>
+    <string name="skill_casual">Casual</string>
+    <string name="skill_intermediate">Intermediate</string>
+    <string name="skill_competitive">Competitive</string>
+
+    <!-- Session detail -->
+    <string name="label_where">Where</string>
+    <string name="label_when">When</string>
+    <string name="label_skill">Skill level</string>
+    <string name="label_host">Host</string>
+    <string name="label_players">Players</string>
+    <string name="label_notes">Notes</string>
+    <string name="button_join">Join session</string>
+    <string name="button_leave">Leave session</string>
+    <string name="button_full">Session full</string>
+    <string name="button_hosting">You\'re hosting</string>
+    <string name="status_joined">You\'re in! See you there.</string>
+    <string name="status_hosting">You\'re hosting this session.</string>
+    <string name="status_full">This session is full.</string>
+    <plurals name="status_spots_left">
+        <item quantity="one">%d spot left</item>
+        <item quantity="other">%d spots left</item>
+    </plurals>
+    <string name="host_you">You</string>
+
+    <!-- Create session form -->
+    <string name="form_section_sport">Sport</string>
+    <string name="form_section_details">Details</string>
+    <string name="form_section_day">Day</string>
+    <string name="form_section_time">Time</string>
+    <string name="form_section_skill">Skill level</string>
+    <string name="hint_title">Session name</string>
+    <string name="hint_location">Location</string>
+    <string name="hint_max_players">Max players</string>
+    <string name="hint_notes">Notes (optional)</string>
+    <string name="helper_location">Court, field, or building</string>
+    <string name="default_max_players" translatable="false">10</string>
+    <string name="button_submit">Create session</string>
+    <string name="error_title_required">Give your session a name</string>
+    <string name="error_location_required">Add where you\'re playing</string>
+    <string name="error_max_players">Enter a number from %1$d to %2$d</string>
+
+    <!-- Synthetic seed data -->
+    <string name="seed_title_1">Friday night runs</string>
+    <string name="seed_location_1">IM Sports-West, Court 2</string>
+    <string name="seed_host_1">Jordan</string>
+    <string name="seed_notes_1">Full court, games to 15. Bring a light and a dark shirt.</string>
+    <string name="seed_title_2">Chill shootaround</string>
+    <string name="seed_location_2">IM Sports-Circle, Court 1</string>
+    <string name="seed_host_2">Priya</string>
+    <string name="seed_notes_2">All skill levels welcome. Half court to start.</string>
+    <string name="seed_title_3">Competitive 5v5</string>
+    <string name="seed_location_3">IM Sports-East, Main Gym</string>
+    <string name="seed_host_3">Marcus</string>
+    <string name="seed_notes_3">Winners stay on. Please be on time.</string>
+    <string name="seed_title_4">Small-sided soccer</string>
+    <string name="seed_location_4">Munn Field</string>
+    <string name="seed_host_4">Diego</string>
+    <string name="seed_notes_4">7v7, cones provided. Cleats recommended.</string>
+    <string name="seed_title_5">Sunday morning 11s</string>
+    <string name="seed_location_5">Service Road Fields, Field 3</string>
+    <string name="seed_host_5">Hannah</string>
+    <string name="seed_notes_5">Full field. Bring water, no shade out there.</string>
+    <string name="seed_title_6">Sand volleyball</string>
+    <string name="seed_location_6">Brody Sand Courts</string>
+    <string name="seed_host_6">Emily</string>
+    <string name="seed_notes_6">Rotating teams of 6.</string>
+    <string name="seed_title_7">Doubles hit</string>
+    <string name="seed_location_7">Outdoor Tennis Center, Court 4</string>
+    <string name="seed_host_7">Sam</string>
+    <string name="seed_notes_7">Looking for one more pair. Balls provided.</string>
+    <string name="seed_title_8">Ultimate on the lawn</string>
+    <string name="seed_location_8">Demonstration Hall Field</string>
+    <string name="seed_host_8">Chris</string>
+    <string name="seed_notes_8">Pull at 6:15. Discs provided.</string>
+    <string name="seed_title_9">Beginner pickleball</string>
+    <string name="seed_location_9">IM Sports-West, Court 5</string>
+    <string name="seed_host_9">Taylor</string>
+    <string name="seed_notes_9">Paddles to borrow. Never played? Perfect.</string>
+</resources>

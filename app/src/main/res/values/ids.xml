@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chip ids are declared once here so the code and both form layouts (portrait and
+     landscape) share the same ids, which is what lets their checked state be restored. -->
+<resources>
+    <item name="chip_sport_basketball" type="id" />
+    <item name="chip_sport_soccer" type="id" />
+    <item name="chip_sport_volleyball" type="id" />
+    <item name="chip_sport_tennis" type="id" />
+    <item name="chip_sport_ultimate" type="id" />
+    <item name="chip_sport_pickleball" type="id" />
+    <item name="chip_day_today" type="id" />
+    <item name="chip_day_tomorrow" type="id" />
+    <item name="chip_day_saturday" type="id" />
+    <item name="chip_day_sunday" type="id" />
+    <item name="chip_time_morning" type="id" />
+    <item name="chip_time_afternoon" type="id" />
+    <item name="chip_time_evening" type="id" />
+    <item name="chip_skill_casual" type="id" />
+    <item name="chip_skill_intermediate" type="id" />
+    <item name="chip_skill_competitive" type="id" />
+</resources>

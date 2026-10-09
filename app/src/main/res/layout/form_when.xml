@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView style="@style/FormSectionLabel" android:text="@string/form_section_day" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/day_chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_day_today"
+            style="@style/FormChip"
+            android:text="@string/day_today" />
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_day_tomorrow"
+            style="@style/FormChip"
+            android:text="@string/day_tomorrow" />
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_day_saturday"
+            style="@style/FormChip"
+            android:text="@string/day_saturday" />
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_day_sunday"
+            style="@style/FormChip"
+            android:text="@string/day_sunday" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <TextView style="@style/FormSectionLabel" android:text="@string/form_section_time" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/time_chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_time_morning"
+            style="@style/FormChip"
+            android:text="@string/time_morning_range" />
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_time_afternoon"
+            style="@style/FormChip"
+            android:text="@string/time_afternoon_range" />
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_time_evening"
+            style="@style/FormChip"
+            android:text="@string/time_evening_range" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <TextView style="@style/FormSectionLabel" android:text="@string/form_section_skill" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/skill_chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_skill_casual"
+            style="@style/FormChip"
+            android:text="@string/skill_casual" />
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_skill_intermediate"
+            style="@style/FormChip"
+            android:text="@string/skill_intermediate" />
+        <com.google.android.material.chip.Chip
+            android:id="@id/chip_skill_competitive"
+            style="@style/FormChip"
+            android:text="@string/skill_competitive" />
+    </com.google.android.material.chip.ChipGroup>
+</LinearLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_green">#1F6B4A</color>
+    <color name="brand_green_container">#C9EEDA</color>
+    <color name="brand_on_green_container">#002114</color>
+    <color name="brand_orange">#C2551B</color>
+    <color name="brand_orange_container">#FFDBCB</color>
+    <color name="brand_on_orange_container">#341000</color>
+    <color name="surface_light">#F8FAF6</color>
+    <color name="surface_dark">#101411</color>
+    <color name="brand_green_dark">#8ED6B1</color>
+    <color name="brand_green_container_dark">#005235</color>
+    <color name="brand_on_green_container_dark">#C9EEDA</color>
+    <color name="brand_orange_dark">#FFB692</color>
+    <color name="brand_orange_container_dark">#7A3000</color>
+    <color name="brand_on_orange_container_dark">#FFDBCB</color>
+    <color name="launcher_background">#1F6B4A</color>
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Heading plus a grid of sports. The grid's column count comes from
+     @integer/sport_grid_columns, which changes for landscape and tablets. -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sport_grid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingEnd="@dimen/screen_padding"
+        android:paddingBottom="@dimen/screen_padding"
+        android:paddingTop="@dimen/space_s"
+        app:layout_constraintTop_toBottomOf="@id/picker_subheading"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width_wide" />
+
+    <TextView
+        android:id="@+id/picker_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:layout_marginTop="@dimen/space_s"
+        android:text="@string/picker_heading"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/sport_grid"
+        app:layout_constraintEnd_toEndOf="@id/sport_grid" />
+
+    <TextView
+        android:id="@+id/picker_subheading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:layout_marginTop="@dimen/space_xs"
+        android:text="@string/picker_subheading"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintTop_toBottomOf="@id/picker_heading"
+        app:layout_constraintStart_toStartOf="@id/sport_grid"
+        app:layout_constraintEnd_toEndOf="@id/sport_grid" />
+</androidx.constraintlayout.widget.ConstraintLayout>

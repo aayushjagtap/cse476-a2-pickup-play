@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_padding">32dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+    <dimen name="column_gap">40dp</dimen>
+    <dimen name="emoji_size">48sp</dimen>
+</resources>

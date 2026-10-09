@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Live region so TalkBack announces "You're in!" after joining. -->
+    <TextView
+        android:id="@+id/detail_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:background="@drawable/bg_status"
+        android:padding="@dimen/space_m"
+        android:textAlignment="viewStart"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        android:textColor="?attr/colorOnPrimaryContainer" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/join_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_m"
+        android:minHeight="@dimen/min_touch_target"
+        android:text="@string/button_join" />
+</LinearLayout>

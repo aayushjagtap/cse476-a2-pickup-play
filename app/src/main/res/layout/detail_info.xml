@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/detail_sport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:textColor="?attr/colorPrimary" />
+
+    <TextView
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        android:textAlignment="viewStart"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+    <TextView style="@style/DetailLabel" android:text="@string/label_where" />
+    <TextView android:id="@+id/detail_location" style="@style/DetailValue" />
+
+    <TextView style="@style/DetailLabel" android:text="@string/label_when" />
+    <TextView android:id="@+id/detail_when" style="@style/DetailValue" />
+
+    <TextView style="@style/DetailLabel" android:text="@string/label_skill" />
+    <TextView android:id="@+id/detail_skill" style="@style/DetailValue" />
+
+    <TextView style="@style/DetailLabel" android:text="@string/label_host" />
+    <TextView android:id="@+id/detail_host" style="@style/DetailValue" />
+
+    <TextView style="@style/DetailLabel" android:text="@string/label_players" />
+    <TextView android:id="@+id/detail_players" style="@style/DetailValue" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/detail_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_s"
+        android:importantForAccessibility="no"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:trackThickness="@dimen/progress_thickness"
+        app:trackCornerRadius="@dimen/space_xs" />
+
+    <TextView
+        android:id="@+id/detail_notes_label"
+        style="@style/DetailLabel"
+        android:text="@string/label_notes" />
+    <TextView android:id="@+id/detail_notes" style="@style/DetailValue" />
+</LinearLayout>

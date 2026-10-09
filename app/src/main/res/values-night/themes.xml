@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PickupPlay" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_green_dark</item>
+        <item name="colorOnPrimary">@color/brand_on_green_container</item>
+        <item name="colorPrimaryContainer">@color/brand_green_container_dark</item>
+        <item name="colorOnPrimaryContainer">@color/brand_on_green_container_dark</item>
+        <item name="colorSecondary">@color/brand_orange_dark</item>
+        <item name="colorOnSecondary">@color/brand_on_orange_container</item>
+        <item name="colorSecondaryContainer">@color/brand_orange_container_dark</item>
+        <item name="colorOnSecondaryContainer">@color/brand_on_orange_container_dark</item>
+        <item name="android:colorBackground">@color/surface_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

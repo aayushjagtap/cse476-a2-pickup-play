@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/sportPickerFragment">
+
+    <!-- Screen 1: choose a sport -->
+    <fragment
+        android:id="@+id/sportPickerFragment"
+        android:name="com.aayushjagtap.pickupplay.ui.SportPickerFragment"
+        android:label="@string/title_sport_picker">
+        <action
+            android:id="@+id/action_sportPicker_to_sessionList"
+            app:destination="@id/sessionListFragment" />
+    </fragment>
+
+    <!-- Screen 2: list of sessions for the chosen sport -->
+    <fragment
+        android:id="@+id/sessionListFragment"
+        android:name="com.aayushjagtap.pickupplay.ui.SessionListFragment"
+        android:label="@string/title_session_list">
+        <argument
+            android:name="sport"
+            app:argType="string"
+            android:defaultValue="BASKETBALL" />
+        <argument
+            android:name="createdId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_sessionList_to_sessionDetail"
+            app:destination="@id/sessionDetailFragment" />
+        <action
+            android:id="@+id/action_sessionList_to_createSession"
+            app:destination="@id/createSessionFragment" />
+    </fragment>
+
+    <!-- Screen 3: details for one session, join or leave -->
+    <fragment
+        android:id="@+id/sessionDetailFragment"
+        android:name="com.aayushjagtap.pickupplay.ui.SessionDetailFragment"
+        android:label="@string/title_session_detail">
+        <argument
+            android:name="sessionId"
+            app:argType="long" />
+    </fragment>
+
+    <!-- Screen 4: host a new session -->
+    <fragment
+        android:id="@+id/createSessionFragment"
+        android:name="com.aayushjagtap.pickupplay.ui.CreateSessionFragment"
+        android:label="@string/title_create_session">
+        <argument
+            android:name="sport"
+            app:argType="string"
+            android:defaultValue="BASKETBALL" />
+        <!-- After creating, show the created sport's list. Popping back to the sport picker
+             means Back from that list never reopens the submitted form. -->
+        <action
+            android:id="@+id/action_createSession_to_sessionList"
+            app:destination="@id/sessionListFragment"
+            app:popUpTo="@id/sportPickerFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+</navigation>
