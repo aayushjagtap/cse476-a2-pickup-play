@@ -9,7 +9,6 @@
     <dimen name="card_padding">16dp</dimen>
     <dimen name="column_gap">24dp</dimen>
     <dimen name="emoji_size">36sp</dimen>
-    <dimen name="emoji_size_small">28sp</dimen>
     <dimen name="min_touch_target">48dp</dimen>
     <dimen name="progress_thickness">8dp</dimen>
     <!-- Caps line length on wide screens so forms and text stay readable. -->

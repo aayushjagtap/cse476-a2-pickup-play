@@ -103,12 +103,14 @@ def screen_size():
 
 
 def swipe_up():
+    hide_keyboard()
     w, h = screen_size()
     adb("shell", "input", "swipe", str(w // 2), str(int(h * 0.75)), str(w // 2), str(int(h * 0.35)), "300")
     time.sleep(0.8)
 
 
 def swipe_down():
+    hide_keyboard()
     w, h = screen_size()
     adb("shell", "input", "swipe", str(w // 2), str(int(h * 0.35)), str(w // 2), str(int(h * 0.80)), "300")
     time.sleep(0.8)
@@ -137,15 +139,18 @@ def tap(text=None, rid=None, contains=False, scroll=False):
 
 
 def type_into(rid, value):
+    hide_keyboard()
     tap(rid=rid, scroll=True)
     adb("shell", "input", "text", value.replace(" ", "%s"))
     time.sleep(0.6)
+    hide_keyboard()
 
 
 def hide_keyboard():
-    if "mInputShown=true" in sh("dumpsys input_method | grep mInputShown"):
-        adb("shell", "input", "keyevent", "4")
-        time.sleep(0.8)
+    for _ in range(2):
+        if "mInputShown=true" in sh("dumpsys input_method | grep mInputShown"):
+            adb("shell", "input", "keyevent", "111")  # ESCAPE closes the IME without navigating back
+            time.sleep(0.8)
 
 
 def back():
@@ -155,9 +160,16 @@ def back():
 
 
 def rotate(landscape):
-    sh("settings put system accelerometer_rotation 0")
-    sh(f"settings put system user_rotation {1 if landscape else 0}")
-    time.sleep(2.5)
+    r = 1 if landscape else 0
+    for attempt in range(4):
+        sh("settings put system accelerometer_rotation 0")
+        sh(f"settings put system user_rotation {r}")
+        sh(f"wm user-rotation lock {r}")
+        time.sleep(2.5)
+        w, h = screen_size()
+        if (w > h) == landscape:
+            return
+    raise RuntimeError(f"display did not rotate to {'landscape' if landscape else 'portrait'}")
 
 
 def shot(name):
