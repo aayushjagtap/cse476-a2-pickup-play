@@ -4,7 +4,6 @@
      as the portrait layout, so typed text and selections carry across the rotation. -->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/form_scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
