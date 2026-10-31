@@ -99,6 +99,29 @@
     <string name="error_location_required">Add where you\'re playing</string>
     <string name="error_max_players">Enter a number from %1$d to %2$d</string>
 
+    <!-- A3: Nearest first (location) -->
+    <string name="nearest_first">Nearest first</string>
+    <string name="open_settings">Settings</string>
+    <string name="location_rationale_title">Use your location?</string>
+    <string name="location_rationale_message">Pickup Play uses your location only while this list is open, to show how far each session is and sort the nearest first. Your location is not stored or shared.</string>
+    <string name="location_rationale_continue">Continue</string>
+    <string name="location_rationale_not_now">Not now</string>
+    <string name="location_waiting">Finding your location…</string>
+    <string name="location_active">Sorted nearest first. Location accurate to about %1$d m.</string>
+    <string name="location_active_no_accuracy">Sorted nearest first from your current location.</string>
+    <string name="location_jump_ignored">Ignored a sudden %1$.0f mi location jump. Keeping your last location until the new one holds steady for a few seconds.</string>
+    <string name="location_jump_confirmed">Your location moved %1$.0f mi and held steady, so distances were updated.</string>
+    <string name="location_denied">Location permission denied. Distances are unavailable, so sessions are shown in the normal order. Tap Nearest first to try again.</string>
+    <string name="location_denied_permanently">Location permission is off for Pickup Play. Distances are unavailable, so sessions are shown in the normal order. Allow location in Settings to sort by distance.</string>
+    <string name="location_unavailable">Location isn\'t available on this device, so sessions can\'t be sorted by distance. Everything else still works.</string>
+    <string name="location_off">Location is turned off on this device, so distances are unavailable. Turn it on in Settings to sort by distance.</string>
+    <string name="band_walkable">Walkable</string>
+    <string name="band_bikeable">Bikeable</string>
+    <string name="band_drive">Drive</string>
+    <string name="distance_walk">%1$.1f mi away · %2$s · %3$d min walk</string>
+    <string name="distance_drive">%1$.1f mi away · %2$s</string>
+    <string name="distance_unknown">Distance unknown</string>
+
     <!-- Synthetic seed data -->
     <string name="seed_title_1">Friday night runs</string>
     <string name="seed_location_1">IM Sports-West, Court 2</string>

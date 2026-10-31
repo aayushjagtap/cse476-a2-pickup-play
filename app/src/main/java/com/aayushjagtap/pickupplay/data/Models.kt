@@ -64,6 +64,9 @@ data class PickupSession(
     val notes: String,
     val isHosting: Boolean = false,
     val isJoined: Boolean = false,
+    /** Where the session is played; null when unknown (sessions created in the app). */
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 ) {
     val isFull: Boolean get() = playerCount >= maxPlayers
 }

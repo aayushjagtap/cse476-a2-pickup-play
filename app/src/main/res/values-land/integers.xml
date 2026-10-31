@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="sport_grid_columns">3</integer>
+    <!-- A2 peer test: in landscape the second row of sports was cut off. Six columns show them all. -->
+    <integer name="sport_grid_columns">6</integer>
     <integer name="session_list_columns">2</integer>
 </resources>

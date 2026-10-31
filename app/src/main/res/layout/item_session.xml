@@ -63,6 +63,19 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
+            android:id="@+id/session_distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:textColor="?attr/colorSecondary"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/session_when"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
             android:id="@+id/session_skill"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,7 +85,7 @@
             android:textColor="?attr/colorPrimary"
             app:layout_constrainedWidth="true"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/session_when"
+            app:layout_constraintTop_toBottomOf="@id/session_distance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/session_players" />
 

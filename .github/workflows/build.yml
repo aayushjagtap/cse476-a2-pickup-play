@@ -71,7 +71,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             adb install -r out/PickupPlay.apk
-            python3 ci/ui_check.py out 2>&1 | tee out/ui_check.log
+            python3 ci/a3_check.py out 2>&1 | tee out/a3_check.log
             adb logcat -d > out/logcat.txt || true
 
       - name: Publish results to ci-results branch

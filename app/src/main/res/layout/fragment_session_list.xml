@@ -50,6 +50,63 @@
             app:layout_constraintStart_toStartOf="@id/session_list"
             app:layout_constraintEnd_toEndOf="@id/session_list" />
 
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/nearest_chip"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:saveEnabled="false"
+            android:text="@string/nearest_first"
+            app:chipIcon="@drawable/ic_location"
+            app:chipIconVisible="true"
+            app:checkedIconVisible="false"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/space_s"
+            app:layout_constraintTop_toBottomOf="@id/create_button"
+            app:layout_constraintStart_toStartOf="@id/session_list" />
+
+        <!-- Status of the location feature: waiting, active, ignored jump, denied, unavailable. -->
+        <LinearLayout
+            android:id="@+id/location_banner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/space_xs"
+            android:background="@drawable/bg_status"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/space_m"
+            android:paddingEnd="@dimen/space_xs"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/nearest_chip"
+            app:layout_constraintStart_toStartOf="@id/session_list"
+            app:layout_constraintEnd_toEndOf="@id/session_list">
+
+            <TextView
+                android:id="@+id/location_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:accessibilityLiveRegion="polite"
+                android:paddingTop="@dimen/space_s"
+                android:paddingBottom="@dimen/space_s"
+                android:textAlignment="viewStart"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnPrimaryContainer" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/location_settings_button"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/min_touch_target"
+                android:text="@string/open_settings"
+                android:visibility="gone" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/session_list"
             android:layout_width="0dp"
@@ -59,7 +116,7 @@
             android:paddingStart="@dimen/screen_padding"
             android:paddingEnd="@dimen/screen_padding"
             android:paddingBottom="@dimen/screen_padding"
-            app:layout_constraintTop_toBottomOf="@id/create_button"
+            app:layout_constraintTop_toBottomOf="@id/location_banner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +130,7 @@
             android:gravity="center"
             android:textAppearance="?attr/textAppearanceBodyLarge"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/create_button"
+            app:layout_constraintTop_toBottomOf="@id/location_banner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

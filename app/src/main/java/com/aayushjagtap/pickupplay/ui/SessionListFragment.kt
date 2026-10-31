@@ -1,9 +1,16 @@
 package com.aayushjagtap.pickupplay.ui
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,14 +21,23 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.aayushjagtap.pickupplay.R
+import com.aayushjagtap.pickupplay.data.Geo
+import com.aayushjagtap.pickupplay.data.LocationStatus
 import com.aayushjagtap.pickupplay.data.PickupSession
+import com.aayushjagtap.pickupplay.data.RankedSession
 import com.aayushjagtap.pickupplay.data.SessionsViewModel
 import com.aayushjagtap.pickupplay.data.Sport
+import com.aayushjagtap.pickupplay.data.TravelBand
 import com.aayushjagtap.pickupplay.databinding.FragmentSessionListBinding
 import com.aayushjagtap.pickupplay.databinding.ItemSessionBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlin.math.roundToInt
 
-/** Screen 2: the list half of the list-detail flow, filtered to the chosen sport. */
+/**
+ * Screen 2: the list half of the list-detail flow, filtered to the chosen sport.
+ * A3: the "Nearest first" chip sorts sessions by live distance from the user.
+ */
 class SessionListFragment : Fragment() {
 
     private var _binding: FragmentSessionListBinding? = null
@@ -30,6 +46,36 @@ class SessionListFragment : Fragment() {
 
     private val sport: Sport by lazy {
         Sport.valueOf(requireArguments().getString(ARG_SPORT, Sport.BASKETBALL.name))
+    }
+
+    private lateinit var tracker: LocationTracker
+    private var latestSessions: List<PickupSession> = emptyList()
+    private lateinit var adapter: SessionAdapter
+
+    /** Runtime permission request, launched only when the user turns on "Nearest first". */
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            val granted = result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            if (granted) {
+                startTracking()
+            } else {
+                viewModel.setDistanceMode(false)
+                // After a second refusal Android stops showing the dialog; send users to Settings.
+                val permanently =
+                    !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
+                viewModel.setLocationStatus(
+                    if (permanently) LocationStatus.PermanentlyDenied else LocationStatus.Denied
+                )
+            }
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        createdAnnounced = savedInstanceState?.getBoolean(KEY_ANNOUNCED) ?: false
+        tracker = LocationTracker(requireContext().applicationContext) { fix ->
+            viewModel.onLocationFix(fix)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -42,7 +88,7 @@ class SessionListFragment : Fragment() {
         binding.listHeader.text = getString(R.string.sessions_header, getString(sport.emojiRes), sportName)
         binding.emptyText.text = getString(R.string.sessions_empty, sportName)
 
-        val adapter = SessionAdapter { session ->
+        adapter = SessionAdapter { session ->
             findNavController().navigate(
                 R.id.action_sessionList_to_sessionDetail,
                 bundleOf(SessionDetailFragment.ARG_SESSION_ID to session.id),
@@ -53,13 +99,25 @@ class SessionListFragment : Fragment() {
         binding.sessionList.adapter = adapter
 
         viewModel.sessionsFor(sport).observe(viewLifecycleOwner) { list ->
-            adapter.submitList(list)
+            latestSessions = list
             val open = list.count { !it.isFull }
             binding.listSubheader.text =
                 resources.getQuantityString(R.plurals.open_sessions_count, open, open)
             binding.emptyText.isVisible = list.isEmpty()
             binding.sessionList.isVisible = list.isNotEmpty()
+            renderList()
         }
+        viewModel.userFix.observe(viewLifecycleOwner) { renderList() }
+        viewModel.distanceMode.observe(viewLifecycleOwner) { on ->
+            binding.nearestChip.isChecked = on
+            renderList()
+        }
+        viewModel.locationStatus.observe(viewLifecycleOwner) { renderStatus(it) }
+
+        binding.nearestChip.setOnClickListener {
+            if (binding.nearestChip.isChecked) enableNearestFirst() else disableNearestFirst()
+        }
+        binding.locationSettingsButton.setOnClickListener { openSettingsFor(viewModel.locationStatus.value) }
 
         binding.createButton.setOnClickListener {
             findNavController().navigate(
@@ -85,12 +143,147 @@ class SessionListFragment : Fragment() {
         }
     }
 
-    private var createdAnnounced = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        createdAnnounced = savedInstanceState?.getBoolean(KEY_ANNOUNCED) ?: false
+    override fun onStart() {
+        super.onStart()
+        // Resume updates (e.g. after rotation or returning from a detail screen).
+        if (viewModel.distanceMode.value == true) {
+            if (hasLocationPermission()) {
+                startTracking()
+            } else {
+                viewModel.setDistanceMode(false)
+                viewModel.setLocationStatus(LocationStatus.Denied)
+            }
+        }
     }
+
+    override fun onStop() {
+        super.onStop()
+        tracker.stop() // No location updates while the list is not visible.
+    }
+
+    // ---------------------------------------------------------------- "Nearest first"
+
+    private fun enableNearestFirst() {
+        when {
+            !tracker.isLocationSupported() -> {
+                viewModel.setDistanceMode(false)
+                viewModel.setLocationStatus(LocationStatus.Unavailable)
+            }
+            hasLocationPermission() -> startTracking()
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) ->
+                showRationale()
+            else -> requestPermission()
+        }
+    }
+
+    private fun disableNearestFirst() {
+        tracker.stop()
+        viewModel.setDistanceMode(false)
+    }
+
+    private fun showRationale() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.location_rationale_title)
+            .setMessage(R.string.location_rationale_message)
+            .setPositiveButton(R.string.location_rationale_continue) { _, _ -> requestPermission() }
+            .setNegativeButton(R.string.location_rationale_not_now) { _, _ ->
+                viewModel.setDistanceMode(false)
+            }
+            .setOnCancelListener { viewModel.setDistanceMode(false) }
+            .show()
+    }
+
+    private fun requestPermission() {
+        permissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            )
+        )
+    }
+
+    private fun hasLocationPermission(): Boolean {
+        val ctx = requireContext()
+        return ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun startTracking() {
+        val precise = ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        viewModel.setDistanceMode(true)
+        when (tracker.start(precise)) {
+            LocationTracker.StartResult.STARTED -> {
+                if (viewModel.userFix.value == null) {
+                    viewModel.setLocationStatus(LocationStatus.Waiting)
+                }
+            }
+            LocationTracker.StartResult.UNAVAILABLE -> {
+                viewModel.setDistanceMode(false)
+                viewModel.setLocationStatus(LocationStatus.Unavailable)
+            }
+            LocationTracker.StartResult.LOCATION_OFF -> {
+                viewModel.setDistanceMode(false)
+                viewModel.setLocationStatus(LocationStatus.LocationOff)
+            }
+        }
+    }
+
+    private fun openSettingsFor(status: LocationStatus?) {
+        val intent = if (status == LocationStatus.LocationOff) {
+            Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        } else {
+            Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", requireContext().packageName, null),
+            )
+        }
+        startActivity(intent)
+    }
+
+    /** Application effect: sort nearest first when a filtered fix is available. */
+    private fun renderList() {
+        if (_binding == null) return
+        val fix = if (viewModel.distanceMode.value == true) viewModel.userFix.value else null
+        adapter.submitList(Geo.rankByDistance(latestSessions, fix)) {
+            if (fix != null) binding.sessionList.scrollToPosition(0)
+        }
+    }
+
+    private fun renderStatus(status: LocationStatus) {
+        val text: String? = when (status) {
+            LocationStatus.Off -> null
+            LocationStatus.Waiting -> getString(R.string.location_waiting)
+            is LocationStatus.Active -> {
+                val accuracy = status.accuracyMeters.roundToInt()
+                val jump = status.confirmedJumpMeters
+                if (jump != null) {
+                    getString(R.string.location_jump_confirmed, Geo.metersToMiles(jump), accuracy)
+                } else if (accuracy > 0) {
+                    getString(R.string.location_active, accuracy)
+                } else {
+                    getString(R.string.location_active_no_accuracy)
+                }
+            }
+            is LocationStatus.JumpIgnored ->
+                getString(R.string.location_jump_ignored, Geo.metersToMiles(status.jumpMeters))
+            LocationStatus.Denied -> getString(R.string.location_denied)
+            LocationStatus.PermanentlyDenied -> getString(R.string.location_denied_permanently)
+            LocationStatus.Unavailable -> getString(R.string.location_unavailable)
+            LocationStatus.LocationOff -> getString(R.string.location_off)
+        }
+        binding.locationStatus.text = text
+        binding.locationBanner.isVisible = text != null
+        binding.locationSettingsButton.isVisible =
+            status == LocationStatus.PermanentlyDenied || status == LocationStatus.LocationOff
+    }
+
+    // ---------------------------------------------------------------- lifecycle bookkeeping
+
+    private var createdAnnounced = false
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -111,7 +304,7 @@ class SessionListFragment : Fragment() {
 
     private class SessionAdapter(
         private val onClick: (PickupSession) -> Unit,
-    ) : ListAdapter<PickupSession, SessionAdapter.Holder>(SessionDiff) {
+    ) : ListAdapter<RankedSession, SessionAdapter.Holder>(RankedDiff) {
 
         class Holder(val binding: ItemSessionBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -119,7 +312,8 @@ class SessionListFragment : Fragment() {
             Holder(ItemSessionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
         override fun onBindViewHolder(holder: Holder, position: Int) {
-            val session = getItem(position)
+            val ranked = getItem(position)
+            val session = ranked.session
             val ctx = holder.itemView.context
             with(holder.binding) {
                 sessionTitle.text = session.title
@@ -130,17 +324,46 @@ class SessionListFragment : Fragment() {
                 val badge = session.badgeText(ctx)
                 sessionBadge.text = badge
                 sessionBadge.isVisible = badge != null
+
+                val distance = distanceText(ctx, ranked)
+                sessionDistance.text = distance
+                sessionDistance.isVisible = distance != null
+
                 root.contentDescription = ctx.getString(
                     R.string.cd_session_card, session.title, session.location,
                     session.whenText(ctx), session.playersText(ctx),
-                )
+                ) + (distance?.let { ", $it" } ?: "")
                 root.setOnClickListener { onClick(session) }
+            }
+        }
+
+        /** "0.4 mi away · Walkable · 8 min walk" — null when distance mode is off. */
+        private fun distanceText(ctx: android.content.Context, ranked: RankedSession): String? {
+            val meters = ranked.distanceMeters
+            if (meters == null) {
+                // Distance mode is on only when at least one session in the list has a distance.
+                return if (currentList.any { it.distanceMeters != null }) {
+                    ctx.getString(R.string.distance_unknown)
+                } else {
+                    null
+                }
+            }
+            val miles = Geo.metersToMiles(meters)
+            val band = TravelBand.forMiles(miles)
+            val bandLabel = ctx.getString(band.labelRes)
+            return if (band == TravelBand.DRIVE) {
+                ctx.getString(R.string.distance_drive, miles, bandLabel)
+            } else {
+                ctx.getString(R.string.distance_walk, miles, bandLabel, Geo.walkMinutes(miles))
             }
         }
     }
 }
 
-private object SessionDiff : DiffUtil.ItemCallback<PickupSession>() {
-    override fun areItemsTheSame(oldItem: PickupSession, newItem: PickupSession) = oldItem.id == newItem.id
-    override fun areContentsTheSame(oldItem: PickupSession, newItem: PickupSession) = oldItem == newItem
+private object RankedDiff : DiffUtil.ItemCallback<RankedSession>() {
+    override fun areItemsTheSame(oldItem: RankedSession, newItem: RankedSession) =
+        oldItem.session.id == newItem.session.id
+
+    override fun areContentsTheSame(oldItem: RankedSession, newItem: RankedSession) =
+        oldItem == newItem
 }
