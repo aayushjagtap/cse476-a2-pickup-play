@@ -1,6 +1,7 @@
 package com.aayushjagtap.pickupplay.data
 
 import android.app.Application
+import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -58,8 +59,8 @@ class SessionsViewModel(application: Application) : AndroidViewModel(application
                 _userFix.value = fix
                 if (decision.confirmedJumpMeters != null) {
                     confirmedJumpMeters = decision.confirmedJumpMeters
-                    confirmedJumpAtMillis = fix.timeMillis
-                } else if (fix.timeMillis - confirmedJumpAtMillis > JUMP_MESSAGE_MILLIS) {
+                    confirmedJumpAtMillis = SystemClock.elapsedRealtime()
+                } else if (SystemClock.elapsedRealtime() - confirmedJumpAtMillis > JUMP_MESSAGE_MILLIS) {
                     confirmedJumpMeters = null
                 }
                 _locationStatus.value = LocationStatus.Active(fix.accuracyMeters, confirmedJumpMeters)

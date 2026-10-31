@@ -12,7 +12,7 @@ class JumpFilter(
     private val maxJumpMeters: Double = 10_000.0,
     private val maxSpeedMps: Double = 300.0,
     private val confirmRadiusMeters: Double = 500.0,
-    private val confirmMillis: Long = 5_000,
+    private val confirmMillis: Long = 10_000,
 ) {
     sealed interface Decision {
         /** Use this fix. [confirmedJumpMeters] is set when it ends a confirmed jump. */

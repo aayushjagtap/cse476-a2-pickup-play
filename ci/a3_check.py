@@ -129,16 +129,16 @@ def main():
     u.check(wait_status("Ignored a sudden", timeout=6), f"Jump ignored: '{status_text()}'")
     order = titles_in_order()
     u.check(order[:1] == ["Competitive 5v5"], f"Order unchanged while jump is unconfirmed: {order}")
-    u.check(u.find("77", contains=True) is None or u.find("Walkable", contains=True) is not None,
-            "Distances not replaced by the bogus location")
+    u.check(u.find("Walkable", contains=True) is not None and u.find("Drive", contains=True) is None,
+            "Distances still from the last good location while the jump is unconfirmed")
     u.shot("a3_6_jump_ignored")
-    u.check(wait_status("held steady", timeout=15), f"Jump confirmed after holding steady: '{status_text()}'")
+    u.check(wait_status("held steady", timeout=20), f"Jump confirmed after holding steady: '{status_text()}'")
     time.sleep(4)
     u.check("held steady" in status_text(), "Confirmation message still readable a few seconds later")
     u.check(u.find("Drive", contains=True) is not None, "Distances updated to Detroit (Drive band)")
     u.shot("a3_7_jump_confirmed")
     target["pos"] = BEAUMONT
-    wait_status("held steady", timeout=15)
+    wait_status("held steady", timeout=20)
     time.sleep(3)
 
     u.log("\n### Rotation keeps the feature on")
@@ -160,7 +160,7 @@ def main():
     u.tap(rid="nearest_chip")  # on again
     u.check(wait_status("Location is turned off", timeout=6), f"Location-off message: '{status_text()}'")
     u.check(u.find(rid="location_settings_button") is not None, "Settings button offered")
-    u.check(u.find("Friday night runs") is not None, "List still shown")
+    u.check(len(titles_in_order()) > 0, "List still shown")
     u.shot("a3_9_location_off")
     u.sh("cmd location set-location-enabled true")
 

@@ -29,7 +29,8 @@ class LocationTracker(
                 latitude = location.latitude,
                 longitude = location.longitude,
                 accuracyMeters = if (location.hasAccuracy()) location.accuracy else 0f,
-                timeMillis = location.time,
+                // Monotonic clock: unaffected by wall-clock or GPS-time differences.
+                timeMillis = location.elapsedRealtimeNanos / 1_000_000,
             )
         )
     }
