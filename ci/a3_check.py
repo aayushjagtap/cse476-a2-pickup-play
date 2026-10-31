@@ -65,8 +65,8 @@ def main():
     time.sleep(2)
 
     u.log("### A2 iteration: sport picker in phone landscape")
-    u.rotate(True)
     u.restart_app()
+    u.rotate(True)
     root = u.dump()
     u.check(all(u.find(s, root=root) is not None for s in
                 ["Basketball", "Soccer", "Volleyball", "Tennis", "Ultimate Frisbee", "Pickleball"]),
