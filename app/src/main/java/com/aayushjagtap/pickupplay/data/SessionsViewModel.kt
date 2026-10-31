@@ -32,10 +32,15 @@ class SessionsViewModel(application: Application) : AndroidViewModel(application
 
     private val jumpFilter = JumpFilter()
 
+    // Keeps the "location moved and held steady" message visible long enough to read.
+    private var confirmedJumpMeters: Double? = null
+    private var confirmedJumpAtMillis = 0L
+
     fun setDistanceMode(on: Boolean) {
         _distanceMode.value = on
         if (!on) {
             jumpFilter.reset()
+            confirmedJumpMeters = null
             _userFix.value = null
             _locationStatus.value = LocationStatus.Off
         }
@@ -51,8 +56,13 @@ class SessionsViewModel(application: Application) : AndroidViewModel(application
         when (val decision = jumpFilter.offer(fix)) {
             is JumpFilter.Decision.Accepted -> {
                 _userFix.value = fix
-                _locationStatus.value =
-                    LocationStatus.Active(fix.accuracyMeters, decision.confirmedJumpMeters)
+                if (decision.confirmedJumpMeters != null) {
+                    confirmedJumpMeters = decision.confirmedJumpMeters
+                    confirmedJumpAtMillis = fix.timeMillis
+                } else if (fix.timeMillis - confirmedJumpAtMillis > JUMP_MESSAGE_MILLIS) {
+                    confirmedJumpMeters = null
+                }
+                _locationStatus.value = LocationStatus.Active(fix.accuracyMeters, confirmedJumpMeters)
             }
             is JumpFilter.Decision.Rejected ->
                 _locationStatus.value = LocationStatus.JumpIgnored(decision.jumpMeters)
@@ -141,5 +151,9 @@ class SessionsViewModel(application: Application) : AndroidViewModel(application
             s(9, Sport.PICKLEBALL, R.string.seed_title_9, R.string.seed_location_9, Day.TOMORROW,
                 TimeSlot.MORNING, SkillLevel.CASUAL, 4, 1, R.string.seed_host_9, R.string.seed_notes_9, 42.7271, -84.4879),
         )
+    }
+
+    private companion object {
+        const val JUMP_MESSAGE_MILLIS = 10_000L
     }
 }

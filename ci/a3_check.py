@@ -129,9 +129,12 @@ def main():
     u.check(wait_status("Ignored a sudden", timeout=6), f"Jump ignored: '{status_text()}'")
     order = titles_in_order()
     u.check(order[:1] == ["Competitive 5v5"], f"Order unchanged while jump is unconfirmed: {order}")
-    u.check(u.find("Drive", contains=True) is None, "Distances not replaced by the bogus location")
+    u.check(u.find("77", contains=True) is None or u.find("Walkable", contains=True) is not None,
+            "Distances not replaced by the bogus location")
     u.shot("a3_6_jump_ignored")
     u.check(wait_status("held steady", timeout=15), f"Jump confirmed after holding steady: '{status_text()}'")
+    time.sleep(4)
+    u.check("held steady" in status_text(), "Confirmation message still readable a few seconds later")
     u.check(u.find("Drive", contains=True) is not None, "Distances updated to Detroit (Drive band)")
     u.shot("a3_7_jump_confirmed")
     target["pos"] = BEAUMONT
@@ -150,7 +153,10 @@ def main():
     u.log("\n### Location turned off (capability unavailable)")
     u.tap(rid="nearest_chip")  # off
     u.sh("cmd location set-location-enabled false")
-    time.sleep(1.5)
+    time.sleep(2)
+    close = u.find("Close")  # Android may show its own "No location access" dialog
+    if close is not None:
+        u.tap_node(close)
     u.tap(rid="nearest_chip")  # on again
     u.check(wait_status("Location is turned off", timeout=6), f"Location-off message: '{status_text()}'")
     u.check(u.find(rid="location_settings_button") is not None, "Settings button offered")

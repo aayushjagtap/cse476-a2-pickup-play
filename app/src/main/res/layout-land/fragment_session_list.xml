@@ -79,7 +79,7 @@
             android:paddingStart="@dimen/space_m"
             android:paddingEnd="@dimen/space_xs"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/location_banner"
+            app:layout_constraintTop_toBottomOf="@id/list_subheader"
             app:layout_constraintStart_toStartOf="@id/session_list"
             app:layout_constraintEnd_toEndOf="@id/session_list">
 
