@@ -217,3 +217,18 @@ def crashed():
     return PKG in out, out
 
 
+
+
+def slow_network(on):
+    """Like the exam appendix: Wi-Fi off so traffic uses the throttled emulated cell network."""
+    if on:
+        sh("svc wifi disable")
+        sh("svc data enable")
+        adb("emu", "network", "speed", "gsm")
+        adb("emu", "network", "delay", "gprs")
+        time.sleep(4)
+    else:
+        adb("emu", "network", "speed", "full")
+        adb("emu", "network", "delay", "none")
+        sh("svc wifi enable")
+        time.sleep(6)
