@@ -1,0 +1,4 @@
+package: edu.msu.cse476.lakelog
+uses-permission: name='android.permission.INTERNET'
+permission: edu.msu.cse476.lakelog.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission: name='edu.msu.cse476.lakelog.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'

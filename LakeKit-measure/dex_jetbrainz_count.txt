@@ -1,0 +1,3 @@
+out/LakeKit-measure/dex/classes.dex:2
+out/LakeKit-measure/dex/classes2.dex:0
+out/LakeKit-measure/dex/classes3.dex:1

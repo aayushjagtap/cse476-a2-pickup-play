@@ -1,0 +1,1 @@
+11-16 08:25:55.638 I/LakeKitMeasure(13993): refresh click handler held the main thread for 0 ms

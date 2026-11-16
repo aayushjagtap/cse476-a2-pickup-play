@@ -1,0 +1,4 @@
+out/LakeLog/dex/classes.dex:0
+out/LakeLog/dex/classes2.dex:0
+out/LakeLog/dex/classes3.dex:0
+out/LakeLog/dex/classes4.dex:0

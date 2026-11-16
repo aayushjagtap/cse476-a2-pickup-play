@@ -1,0 +1,131 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        11fcf2f edu.msu.cse476.lakekit/.MainActivity filter 905b93c
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        64856c5 edu.msu.cse476.lakekit/androidx.profileinstaller.ProfileInstallReceiver filter 6132d28
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        64856c5 edu.msu.cse476.lakekit/androidx.profileinstaller.ProfileInstallReceiver filter 89b281a
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        64856c5 edu.msu.cse476.lakekit/androidx.profileinstaller.ProfileInstallReceiver filter e642f4b
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        64856c5 edu.msu.cse476.lakekit/androidx.profileinstaller.ProfileInstallReceiver filter 2dc9a41
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Domain verification status:
+
+Permissions:
+  Permission [edu.msu.cse476.lakekit.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (cc7f430):
+    sourcePackage=edu.msu.cse476.lakekit
+    uid=10194 gids=[] type=0 prot=signature
+    perm=PermissionInfo{aa9c8a9 edu.msu.cse476.lakekit.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    flags=0x0
+
+Registered ContentProviders:
+  edu.msu.cse476.lakekit/androidx.startup.InitializationProvider:
+    Provider{1241e2e edu.msu.cse476.lakekit/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [edu.msu.cse476.lakekit.androidx-startup]:
+    Provider{1241e2e edu.msu.cse476.lakekit/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{3270dcf edu.msu.cse476.lakekit}
+
+Key Set Manager:
+  [edu.msu.cse476.lakekit]
+      Signing KeySets: 56
+
+Packages:
+  Package [edu.msu.cse476.lakekit] (af0235c):
+    appId=10194
+    pkg=Package{82d4665 edu.msu.cse476.lakekit}
+    codePath=/data/app/~~V6GB1ipDRLUSWWVNGWcNDA==/edu.msu.cse476.lakekit-tUnOFVqYUEvbSHirAYxm_A==
+    resourcePath=/data/app/~~V6GB1ipDRLUSWWVNGWcNDA==/edu.msu.cse476.lakekit-tUnOFVqYUEvbSHirAYxm_A==
+    legacyNativeLibraryDir=/data/app/~~V6GB1ipDRLUSWWVNGWcNDA==/edu.msu.cse476.lakekit-tUnOFVqYUEvbSHirAYxm_A==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=1 minSdk=26 targetSdk=34
+    minExtensionVersions=[]
+    versionName=1.0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    dataDir=/data/user/0/edu.msu.cse476.lakekit
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-11-16 08:25:18
+    lastUpdateTime=2026-11-16 08:25:18
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=com.android.shell
+    originatingPackageName=null
+    packageSource=1
+    appMetadataFilePath=null
+    signatures=PackageSignatures{dd7ef3a version:2, signatures:[12aa9094], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+      edu.msu.cse476.lakekit.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      edu.msu.cse476.lakekit.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      edu.msu.cse476.lakekit.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=345214 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-11-16 08:25:18
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+        /data/resource-cache/com.android.systemui-neutral-BZ0A.frro
+        /data/resource-cache/com.android.systemui-accent-t8sx.frro
+        /data/resource-cache/com.android.systemui-dynamic-Ubge.frro
+      legacy overlay paths:
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      gids=[3003]
+      runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.ACCESS_COARSE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.google.android.settings.intelligence:
+      edu.msu.cse476.lakekit
+  queryable via interaction:
+    User 0:
+      [com.android.settings,android,com.android.server.telecom,com.android.location.fused,com.android.emulator.multidisplay,com.android.inputdevices,com.android.keychain,com.android.wallpaperbackup,com.android.providers.settings,com.android.localtransport,com.android.dynsystem]:
+        edu.msu.cse476.lakekit
+      [com.google.android.gms,com.google.android.gsf]:
+        edu.msu.cse476.lakekit
+      com.google.android.inputmethod.latin:
+        edu.msu.cse476.lakekit
+  queryable via uses-library:
+
+Dexopt state:
+  [edu.msu.cse476.lakekit]
+    path: /data/app/~~V6GB1ipDRLUSWWVNGWcNDA==/edu.msu.cse476.lakekit-tUnOFVqYUEvbSHirAYxm_A==/base.apk
+      x86_64: [status=run-from-apk] [reason=unknown] [primary-abi]
+        [location is error]
+
+Compiler stats:
+  [edu.msu.cse476.lakekit]
+    (No recorded stats)

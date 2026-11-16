@@ -1,0 +1,1 @@
+-rw-r--r-- 1 runner runner 5729691 Nov 16 08:08 out/LakeLog/LakeLog.apk
