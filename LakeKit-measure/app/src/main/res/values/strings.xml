@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LakeKit</string>
+    <string name="refresh">Refresh</string>
+    <string name="recent_only">Latest day only</string>
+    <string name="cd_survey">Open survey view</string>
+    <string name="cd_about">About this app</string>
+    <string name="cd_export">Export readings as CSV</string>
+    <string name="cd_trend">Trend of recent readings</string>
+    <string name="survey_title">Survey sweep</string>
+    <string name="survey_hint">Each dot is one water level reading, placed around the dial in time order.</string>
+    <string name="loading">Loading…</string>
+    <string name="no_data">No readings yet. Tap Refresh.</string>
+    <string name="never_refreshed">Never refreshed</string>
+    <string name="refreshed_at">Refreshed %1$d min ago (%2$s)</string>
+    <string name="refresh_failed">Refresh failed: %1$s</string>
+    <string name="station_summary">%1$s: %2$d readings</string>
+    <string name="station_status">Station: %1$s</string>
+    <string name="status_unknown">status unavailable</string>
+    <string name="exported">Saved %1$s</string>
+    <string name="about_text">LakeKit shows Lake Michigan\'s water level at Ludington, from NOAA\'s gauge there. It plots the last six days of readings, shows where the lake sits within its recent range, and exports the readings as a CSV file.</string>
+</resources>

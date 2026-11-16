@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">LakeLog</string>
+    <string name="title_readings">Readings</string>
+    <string name="title_note">Note</string>
+
+    <!-- Main -->
+    <string name="light_level">Light level</string>
+    <string name="waiting_for_light">Waiting for the light sensor…</string>
+    <string name="no_light_sensor">This device has no light sensor.</string>
+    <string name="lux_value">%1$d lx</string>
+    <string name="observer">Observer</string>
+    <string name="observer_hint">Your name</string>
+    <string name="readings">Readings</string>
+
+    <!-- Readings -->
+    <string name="downloading">Downloading…</string>
+    <string name="download_failed">Download failed. %1$s</string>
+    <string name="no_readings">No readings to show.</string>
+    <string name="retry">Retry</string>
+    <string name="refresh">Refresh</string>
+    <string name="level_meters">%1$s m</string>
+    <string name="level_unavailable">Unavailable</string>
+    <string name="note_mark" translatable="false">•</string>
+    <string name="cd_reading">%1$s, %2$s</string>
+    <string name="cd_reading_with_note">%1$s, %2$s, has a note</string>
+    <plurals name="reading_count">
+        <item quantity="one">%d reading in the last 48 hours, newest first</item>
+        <item quantity="other">%d readings in the last 48 hours, newest first</item>
+    </plurals>
+
+    <!-- Note -->
+    <string name="observer_label_value">Observer: %1$s</string>
+    <string name="observer_not_set">not set</string>
+    <string name="note_hint">Note</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+</resources>
