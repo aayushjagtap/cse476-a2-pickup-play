@@ -73,6 +73,7 @@ class SessionListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createdAnnounced = savedInstanceState?.getBoolean(KEY_ANNOUNCED) ?: false
+        pendingScrollToId = savedInstanceState?.getLong(KEY_PENDING_SCROLL, NO_ID) ?: NO_ID
         tracker = LocationTracker(requireContext().applicationContext) { fix ->
             viewModel.onLocationFix(fix)
         }
@@ -131,7 +132,9 @@ class SessionListFragment : Fragment() {
         val createdId = requireArguments().getLong(ARG_CREATED_ID, NO_ID)
         if (createdId != NO_ID && !createdAnnounced) {
             createdAnnounced = true
-            binding.sessionList.scrollToPosition(0)
+            // A4: the list comes from the database and may first show the cached list from
+            // before the save; scroll once the new session is actually in it (see renderList).
+            pendingScrollToId = createdId
             Snackbar.make(binding.root, R.string.session_created, Snackbar.LENGTH_LONG)
                 .setAction(R.string.view) {
                     findNavController().navigate(
@@ -249,7 +252,14 @@ class SessionListFragment : Fragment() {
         if (_binding == null) return
         val fix = if (viewModel.distanceMode.value == true) viewModel.userFix.value else null
         adapter.submitList(Geo.rankByDistance(latestSessions, fix)) {
-            if (fix != null) binding.sessionList.scrollToPosition(0)
+            if (_binding == null) return@submitList
+            val created = adapter.currentList.indexOfFirst { it.session.id == pendingScrollToId }
+            if (created >= 0) {
+                binding.sessionList.scrollToPosition(created)
+                pendingScrollToId = NO_ID
+            } else if (fix != null) {
+                binding.sessionList.scrollToPosition(0)
+            }
         }
     }
 
@@ -285,9 +295,13 @@ class SessionListFragment : Fragment() {
 
     private var createdAnnounced = false
 
+    // Session just created on the form, to scroll into view once the database delivers it.
+    private var pendingScrollToId = NO_ID
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(KEY_ANNOUNCED, createdAnnounced)
+        outState.putLong(KEY_PENDING_SCROLL, pendingScrollToId)
     }
 
     override fun onDestroyView() {
@@ -300,6 +314,7 @@ class SessionListFragment : Fragment() {
         const val ARG_CREATED_ID = "createdId"
         private const val NO_ID = -1L
         private const val KEY_ANNOUNCED = "createdAnnounced"
+        private const val KEY_PENDING_SCROLL = "pendingScrollToId"
     }
 
     private class SessionAdapter(

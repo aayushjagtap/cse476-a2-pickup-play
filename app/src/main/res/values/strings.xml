@@ -97,6 +97,10 @@
     <string name="button_submit">Create session</string>
     <string name="error_title_required">Give your session a name</string>
     <string name="error_location_required">Add where you\'re playing</string>
+    <!-- A4: local database errors -->
+    <string name="error_db_load">Couldn\'t load saved sessions. Try reopening the app.</string>
+    <string name="error_db_create">Couldn\'t save your session. Please try again.</string>
+    <string name="error_db_join">Couldn\'t update your spot. Please try again.</string>
     <string name="error_max_players">Enter a number from %1$d to %2$d</string>
 
     <!-- A3: Nearest first (location) -->

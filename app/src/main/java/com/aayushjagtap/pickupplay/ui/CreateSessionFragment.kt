@@ -7,28 +7,28 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.aayushjagtap.pickupplay.R
 import com.aayushjagtap.pickupplay.data.CreateSessionViewModel
 import com.aayushjagtap.pickupplay.data.Day
-import com.aayushjagtap.pickupplay.data.SessionsViewModel
 import com.aayushjagtap.pickupplay.data.SkillLevel
 import com.aayushjagtap.pickupplay.data.Sport
 import com.aayushjagtap.pickupplay.data.TimeSlot
 import com.aayushjagtap.pickupplay.databinding.FragmentCreateSessionBinding
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Screen 4: form to host a new pickup session (Task 2).
  * Typed text survives rotation through EditText saved state; chip selections survive
  * through [CreateSessionViewModel]'s SavedStateHandle.
+ * A4: the session is saved to the local database in the background; the screen navigates to
+ * the list only after the save succeeds, and shows an error (keeping the form) if it fails.
  */
 class CreateSessionFragment : Fragment() {
 
     private var _binding: FragmentCreateSessionBinding? = null
     private val binding get() = _binding!!
-    private val sessionsViewModel: SessionsViewModel by activityViewModels()
     private val formViewModel: CreateSessionViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -71,6 +71,19 @@ class CreateSessionFragment : Fragment() {
 
         }
         binding.submitButton.setOnClickListener { submit() }
+        formViewModel.saveState.observe(viewLifecycleOwner) { render(it) }
+    }
+
+    private fun render(state: CreateSessionViewModel.SaveState) {
+        binding.submitButton.isEnabled = state == CreateSessionViewModel.SaveState.Idle
+        when (state) {
+            is CreateSessionViewModel.SaveState.Saved -> showCreated(state.id, state.sport)
+            CreateSessionViewModel.SaveState.Failed -> {
+                Snackbar.make(binding.root, R.string.error_db_create, Snackbar.LENGTH_LONG).show()
+                formViewModel.onFailureShown()
+            }
+            else -> Unit
+        }
     }
 
     private fun submit() = with(binding.formFields) {
@@ -92,23 +105,18 @@ class CreateSessionFragment : Fragment() {
         }
         if (!valid) return@with
 
-        val id = sessionsViewModel.createSession(
-            sport = formViewModel.sport ?: Sport.BASKETBALL,
-            title = title,
-            location = location,
-            day = formViewModel.day ?: Day.TODAY,
-            time = formViewModel.time ?: TimeSlot.EVENING,
-            skill = formViewModel.skill ?: SkillLevel.CASUAL,
-            maxPlayers = max!!,
-            notes = notes,
-        )
+        formViewModel.save(title = title, location = location, maxPlayers = max!!, notes = notes)
+    }
 
+    private fun showCreated(id: Long, sport: Sport) {
+        val nav = findNavController()
+        if (nav.currentDestination?.id != R.id.createSessionFragment) return
         // Show the list for the sport that was created (the user may have switched sport on
         // this form). The action pops back to the sport picker so Back never returns to the form.
-        findNavController().navigate(
+        nav.navigate(
             R.id.action_createSession_to_sessionList,
             bundleOf(
-                SessionListFragment.ARG_SPORT to (formViewModel.sport ?: Sport.BASKETBALL).name,
+                SessionListFragment.ARG_SPORT to sport.name,
                 SessionListFragment.ARG_CREATED_ID to id,
             ),
         )

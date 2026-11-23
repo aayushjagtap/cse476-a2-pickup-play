@@ -195,6 +195,12 @@ def restart_app():
     time.sleep(2.0)
 
 
+def fresh_start():
+    """A4: sessions persist in a database, so wipe app data first for a known starting state."""
+    sh(f"pm clear {PKG}")
+    restart_app()
+
+
 def chip_checked(text):
     n = find(text)
     return n is not None and n.get("checked") == "true"
@@ -217,7 +223,7 @@ def run_tasks_and_screens(label, w, h, density, landscape):
     log(f"\n### {label}: {w}x{h} px display, density {density}, {'landscape' if landscape else 'portrait'}")
     set_display(w, h, density)
     rotate(landscape)
-    restart_app()
+    fresh_start()
     tag = label.replace(" ", "_")
 
     # Screen 1 + Task 1: pick a sport
@@ -279,7 +285,7 @@ def rotation_check(label, w, h, density):
     log(f"\n### Rotation state check on {label} ({w}x{h} px, density {density})")
     set_display(w, h, density)
     rotate(False)
-    restart_app()
+    fresh_start()
     tap("Basketball")
     tap("Create session")
     type_into("title_input", "Rotation test")

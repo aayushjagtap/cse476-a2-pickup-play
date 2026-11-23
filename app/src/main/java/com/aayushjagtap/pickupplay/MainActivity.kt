@@ -2,6 +2,7 @@ package com.aayushjagtap.pickupplay
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -11,7 +12,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.aayushjagtap.pickupplay.data.SessionsViewModel
 import com.aayushjagtap.pickupplay.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 /** Single activity that hosts the four fragment screens through the Navigation component. */
 class MainActivity : AppCompatActivity() {
@@ -19,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val sessionsViewModel: SessionsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -48,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         navController = navHost.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // A4: database errors (failed load or failed join/leave) are reported once, on any screen.
+        sessionsViewModel.messages.observe(this) { event ->
+            event.take()?.let { Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show() }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean =

@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -37,6 +38,16 @@ android {
     lint {
         abortOnError = false
     }
+
+    testOptions {
+        // Robolectric needs Android resources to run the Room tests on the local JVM.
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+ksp {
+    // Exported schemas document each database version and are needed for future migrations.
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
@@ -51,4 +62,18 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
+
+    // A4: local persistence (Room over SQLite) and coroutines for off-main-thread work.
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
+    ksp("androidx.room:room-compiler:2.7.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+
+    // Local JVM tests (Robolectric runs Room against a real SQLite build).
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.test:core-ktx:1.6.1")
+    testImplementation("androidx.test.ext:junit:1.2.1")
+    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
 }
