@@ -9,6 +9,7 @@ import com.aayushjagtap.pickupplay.data.Day
 import com.aayushjagtap.pickupplay.data.PickupSession
 import com.aayushjagtap.pickupplay.data.SkillLevel
 import com.aayushjagtap.pickupplay.data.Sport
+import com.aayushjagtap.pickupplay.data.SyncState
 import com.aayushjagtap.pickupplay.data.TimeSlot
 
 /** Table and column names, shared by the entity, the DAO's SQL and the first-run seed. */
@@ -30,6 +31,11 @@ object SessionTable {
     const val LATITUDE = "latitude"
     const val LONGITUDE = "longitude"
     const val CREATED_AT = "created_at"
+    // A4 Phase 2 (database version 2)
+    const val REMOTE_ID = "remote_id"
+    const val OWNER_UID = "owner_uid"
+    const val SYNC_STATE = "sync_state"
+    const val SYNCED_AT = "synced_at"
 }
 
 /**
@@ -37,7 +43,14 @@ object SessionTable {
  * `name` so reordering an enum never corrupts saved data. [createdAt] orders the list so newly
  * created sessions appear first, as they did when sessions lived in memory (seed rows use 0).
  */
-@Entity(tableName = SessionTable.NAME, indices = [Index(SessionTable.SPORT)])
+@Entity(
+    tableName = SessionTable.NAME,
+    indices = [
+        Index(SessionTable.SPORT),
+        // One local row per cloud document: merging server data can never create duplicates.
+        Index(value = [SessionTable.REMOTE_ID], unique = true),
+    ],
+)
 data class SessionEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = SessionTable.ID) val id: Long = 0,
     @ColumnInfo(name = SessionTable.SPORT) val sport: String,
@@ -55,6 +68,13 @@ data class SessionEntity(
     @ColumnInfo(name = SessionTable.LATITUDE) val latitude: Double?,
     @ColumnInfo(name = SessionTable.LONGITUDE) val longitude: Double?,
     @ColumnInfo(name = SessionTable.CREATED_AT) val createdAt: Long,
+    /** Firestore document id (a UUID). Null for sample sessions, which are never uploaded. */
+    @ColumnInfo(name = SessionTable.REMOTE_ID) val remoteId: String? = null,
+    @ColumnInfo(name = SessionTable.OWNER_UID) val ownerUid: String? = null,
+    @ColumnInfo(name = SessionTable.SYNC_STATE, defaultValue = "LOCAL")
+    val syncState: String = SyncState.LOCAL.name,
+    /** When the server last confirmed this row (device clock, millis). */
+    @ColumnInfo(name = SessionTable.SYNCED_AT) val syncedAt: Long? = null,
 ) {
     /** Converts to the UI model, or null if a stored enum name is no longer recognised. */
     fun toModel(): PickupSession? = runCatching {
@@ -74,6 +94,9 @@ data class SessionEntity(
             isJoined = isJoined,
             latitude = latitude,
             longitude = longitude,
+            remoteId = remoteId,
+            ownerUid = ownerUid,
+            syncState = runCatching { SyncState.valueOf(syncState) }.getOrDefault(SyncState.PENDING),
         )
     }.getOrNull()
 
@@ -95,6 +118,10 @@ data class SessionEntity(
         put(SessionTable.LATITUDE, latitude)
         put(SessionTable.LONGITUDE, longitude)
         put(SessionTable.CREATED_AT, createdAt)
+        put(SessionTable.REMOTE_ID, remoteId)
+        put(SessionTable.OWNER_UID, ownerUid)
+        put(SessionTable.SYNC_STATE, syncState)
+        put(SessionTable.SYNCED_AT, syncedAt)
     }
 
     companion object {
@@ -115,6 +142,9 @@ data class SessionEntity(
             latitude = s.latitude,
             longitude = s.longitude,
             createdAt = createdAt,
+            remoteId = s.remoteId,
+            ownerUid = s.ownerUid,
+            syncState = s.syncState.name,
         )
     }
 }

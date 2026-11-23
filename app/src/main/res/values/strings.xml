@@ -163,4 +163,71 @@
     <string name="seed_location_9">IM Sports-West, Court 5</string>
     <string name="seed_host_9">Taylor</string>
     <string name="seed_notes_9">Paddles to borrow. Never played? Perfect.</string>
+
+    <!-- ============ A4 Phase 2: cloud account and sync ============ -->
+    <string name="action_account">Account and cloud sync</string>
+    <string name="title_account">Account</string>
+    <string name="account_header">Cloud sync</string>
+    <string name="account_intro">Sign in to back up the sessions you create to the cloud and load them again later, even after reinstalling. Everything else works on this device without signing in.</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="button_sign_in">Sign in</string>
+    <string name="button_sign_out">Sign out</string>
+    <string name="button_sync_now">Sync now (read from server)</string>
+    <string name="button_probe">Test: read server data without signing in</string>
+    <string name="probe_explanation">Security check: while signed out, ask the server for session data. The server should refuse.</string>
+    <string name="signed_in_as">Signed in as %1$s</string>
+    <string name="error_email_invalid">Enter a valid email address</string>
+    <string name="error_password_required">Enter your password</string>
+    <string name="label_cloud">Cloud</string>
+
+    <string name="cloud_not_configured">Cloud sync isn\'t set up in this build (no Firebase configuration). Sessions are saved on this device only.</string>
+    <string name="cloud_using_emulator">Debug build connected to the LOCAL Firebase emulator, not the real cloud project.</string>
+
+    <string name="cloud_busy_signing_in">Signing in…</string>
+    <string name="cloud_busy_syncing">Syncing: uploading new sessions, then reading from the server…</string>
+    <string name="cloud_busy_uploading">Uploading your new session…</string>
+    <string name="cloud_busy_probing">Asking the server without signing in…</string>
+
+    <string name="cloud_last_sync_ok">Last sync %1$s: server read OK. Sessions on the server: %2$d. New on this device: %3$d.</string>
+    <string name="cloud_last_uploaded">Uploaded %1$d session(s).</string>
+    <string name="cloud_last_not_uploaded">%1$d session(s) NOT uploaded: %2$s.</string>
+    <string name="cloud_last_sync_failed">Last sync %1$s FAILED: %2$s. Nothing was synced; your sessions are still saved on this device.</string>
+    <string name="cloud_last_upload_ok">Last upload %1$s: %2$d session(s) saved to the cloud.</string>
+    <string name="cloud_last_upload_failed">Last upload %1$s FAILED: %2$s. The session is saved on this device but not synced.</string>
+    <string name="probe_denied">Security check %1$s: the server DENIED the unauthenticated read (permission denied). The rules are working.</string>
+    <string name="probe_allowed">Security check %1$s: WARNING, the server allowed an unauthenticated read. Check the Firestore rules.</string>
+    <string name="probe_inconclusive">Security check %1$s: no answer from the server (%2$s), so this run proves nothing.</string>
+
+    <plurals name="unsynced_signed_in">
+        <item quantity="one">%d session on this device is not synced yet.</item>
+        <item quantity="other">%d sessions on this device are not synced yet.</item>
+    </plurals>
+    <plurals name="unsynced_signed_out">
+        <item quantity="one">%d session is saved on this device only. Sign in to upload it.</item>
+        <item quantity="other">%d sessions are saved on this device only. Sign in to upload them.</item>
+    </plurals>
+
+    <string name="cloud_signed_in">Signed in. Syncing with the cloud…</string>
+    <string name="cloud_signed_out">Signed out. Your sessions are still on this device.</string>
+    <string name="cloud_sync_ok">Synced. Sessions on the server: %1$d. New on this device: %2$d.</string>
+    <string name="cloud_sync_retrieved">Retrieved %1$d session(s) from the cloud.</string>
+    <string name="cloud_sync_partial">%1$d session(s) NOT synced: %2$s. They\'re still saved on this device.</string>
+    <string name="cloud_sync_failed">Cloud sync failed: %1$s. Showing sessions saved on this device.</string>
+    <string name="cloud_upload_failed">%1$s. Your session is saved on this device but is NOT synced to the cloud.</string>
+
+    <string name="cloud_error_not_configured">Cloud sync isn\'t set up in this build</string>
+    <string name="cloud_error_not_signed_in">You\'re not signed in</string>
+    <string name="cloud_error_offline">No internet connection</string>
+    <string name="cloud_error_timeout">The cloud server didn\'t respond in time</string>
+    <string name="cloud_error_unreachable">Couldn\'t reach the cloud server</string>
+    <string name="cloud_error_permission_denied">The server refused access (permission denied)</string>
+    <string name="cloud_error_bad_credentials">Wrong email or password</string>
+    <string name="cloud_error_too_many">Too many attempts. Try again later</string>
+    <string name="cloud_error_unknown">Unexpected cloud error</string>
+
+    <string name="sync_pending">☁ Not synced: saved on this device only</string>
+    <string name="sync_uploading">☁ Uploading…</string>
+    <string name="sync_failed">☁ Not synced: upload failed, saved on this device</string>
+    <string name="sync_synced">☁ Synced to cloud</string>
 </resources>

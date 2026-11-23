@@ -8,8 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.aayushjagtap.pickupplay.R
+import com.aayushjagtap.pickupplay.data.cloud.CloudSyncManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 /**
  * Holds the create-form selections in a SavedStateHandle so the chosen sport, day, time and
@@ -19,6 +21,8 @@ import kotlinx.coroutines.launch
  * A4: also saves the new session to the database in the background and reports the outcome
  * through [saveState]. Because this ViewModel survives rotation, a save that finishes while the
  * screen is rotating is still delivered to the recreated fragment.
+ * A4 Phase 2: each new session gets a stable UUID shared with its Firestore document and starts
+ * as not synced; once it is safely in Room, the cloud upload runs in the background.
  */
 class CreateSessionViewModel(
     application: Application,
@@ -69,6 +73,7 @@ class CreateSessionViewModel(
         val current = _saveState.value
         if (current == SaveState.Saving || current is SaveState.Saved) return
         val chosenSport = sport ?: Sport.BASKETBALL
+        val cloud = CloudSyncManager.get(getApplication())
         val session = PickupSession(
             id = 0L,
             sport = chosenSport,
@@ -83,11 +88,19 @@ class CreateSessionViewModel(
             notes = notes,
             isHosting = true,
             isJoined = true,
+            remoteId = UUID.randomUUID().toString(),
+            // Owned by the signed-in account at creation (null when signed out), so it can only
+            // ever be uploaded under that account.
+            ownerUid = cloud.state.value.user?.uid,
+            syncState = SyncState.PENDING,
         )
         _saveState.value = SaveState.Saving
         viewModelScope.launch {
             _saveState.value = try {
-                SaveState.Saved(repository.createSession(session), chosenSport)
+                val id = repository.createSession(session)
+                // Saved locally first; the upload (if signed in) cannot lose the session.
+                cloud.onSessionCreated()
+                SaveState.Saved(id, chosenSport)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {

@@ -1,0 +1,7 @@
+# Binary files: never convert line endings (would corrupt them).
+*.pdf binary
+*.png binary
+*.jpg binary
+*.apk binary
+*.jar binary
+*.zip binary

@@ -67,6 +67,30 @@ data class PickupSession(
     /** Where the session is played; null when unknown (sessions created in the app). */
     val latitude: Double? = null,
     val longitude: Double? = null,
+    /** A4: stable id shared with the Firestore document; null for the built-in sample sessions. */
+    val remoteId: String? = null,
+    /** A4: Firebase UID of the host once the session belongs to a signed-in account. */
+    val ownerUid: String? = null,
+    val syncState: SyncState = SyncState.LOCAL,
 ) {
     val isFull: Boolean get() = playerCount >= maxPlayers
+}
+
+/**
+ * Cloud status of a session. Only sessions the user creates (and sessions downloaded from the
+ * server) take part in sync; the sample sessions stay [LOCAL].
+ */
+enum class SyncState {
+    /** Sample data that lives only on this device and is never uploaded. */
+    LOCAL,
+    /** Created by the user, waiting to be uploaded (e.g. signed out). */
+    PENDING,
+    /** Upload in progress. */
+    UPLOADING,
+    /** The last upload attempt failed; the session is still saved on this device. */
+    FAILED,
+    /** Confirmed on the Firestore server. */
+    SYNCED;
+
+    val needsUpload: Boolean get() = this == PENDING || this == UPLOADING || this == FAILED
 }

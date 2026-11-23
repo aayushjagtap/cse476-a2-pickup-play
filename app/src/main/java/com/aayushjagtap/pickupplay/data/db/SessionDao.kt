@@ -28,6 +28,45 @@ abstract class SessionDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     abstract suspend fun insert(session: SessionEntity): Long
 
+    // ---- A4 Phase 2: cloud sync bookkeeping ----
+
+    /** Sessions the user created that the server has not confirmed yet, oldest first. */
+    @Query(
+        "SELECT * FROM sessions WHERE sync_state IN ('PENDING', 'UPLOADING', 'FAILED') " +
+            "ORDER BY created_at ASC"
+    )
+    abstract suspend fun getUnsynced(): List<SessionEntity>
+
+    @Query("SELECT COUNT(*) FROM sessions WHERE sync_state IN ('PENDING', 'UPLOADING', 'FAILED')")
+    abstract fun observeUnsyncedCount(): Flow<Int>
+
+    @Query("SELECT * FROM sessions WHERE remote_id = :remoteId")
+    abstract suspend fun getByRemoteId(remoteId: String): SessionEntity?
+
+    @Query("UPDATE sessions SET sync_state = :state WHERE id = :id")
+    abstract suspend fun setSyncState(id: Long, state: String)
+
+    @Query(
+        "UPDATE sessions SET sync_state = 'SYNCED', owner_uid = :ownerUid, synced_at = :syncedAt " +
+            "WHERE id = :id"
+    )
+    abstract suspend fun markSynced(id: Long, ownerUid: String, syncedAt: Long)
+
+    /** The server already has this session (e.g. an earlier upload landed late): mark it synced. */
+    @Query(
+        "UPDATE sessions SET sync_state = 'SYNCED', synced_at = :syncedAt " +
+            "WHERE remote_id = :remoteId AND sync_state != 'SYNCED'"
+    )
+    abstract suspend fun confirmByRemoteId(remoteId: String, syncedAt: Long): Int
+
+    /** An upload interrupted by the app being killed is simply pending again. */
+    @Query("UPDATE sessions SET sync_state = 'PENDING' WHERE sync_state = 'UPLOADING'")
+    abstract suspend fun resetInterruptedUploads(): Int
+
+    /** Inserts a downloaded session unless a row with the same remote id exists (returns -1). */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract suspend fun insertIfAbsent(session: SessionEntity): Long
+
     /** Leaves a joined (not hosted) session. Returns the number of rows changed (0 or 1). */
     @Query(
         "UPDATE sessions SET is_joined = 0, player_count = player_count - 1 " +

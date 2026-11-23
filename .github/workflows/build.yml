@@ -91,3 +91,29 @@ jobs:
           git add -A
           git commit -q -m "CI results for ${GITHUB_SHA}"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" ci-results
+
+  # A4 Phase 2: firestore.rules checked by the official Firestore emulator (offline demo project,
+  # no Firebase credentials needed). Also runs the JVM unit tests (Room, migration, mocked sync).
+  rules-and-unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Firestore security rules tests (emulator)
+        working-directory: firebase-tests
+        run: |
+          npm ci --ignore-scripts
+          npm run test:emulator
+      - name: JVM unit tests
+        run: |
+          chmod +x gradlew
+          ./gradlew testDebugUnitTest --no-daemon

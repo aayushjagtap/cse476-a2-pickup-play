@@ -4,6 +4,12 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/sportPickerFragment">
 
+    <!-- A4: the account screen can be opened from the toolbar on any screen. -->
+    <action
+        android:id="@+id/action_global_account"
+        app:destination="@id/accountFragment"
+        app:launchSingleTop="true" />
+
     <!-- Screen 1: choose a sport -->
     <fragment
         android:id="@+id/sportPickerFragment"
@@ -62,4 +68,10 @@
             app:popUpTo="@id/sportPickerFragment"
             app:popUpToInclusive="false" />
     </fragment>
+
+    <!-- A4 Phase 2: cloud account (sign in / out, sync) -->
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.aayushjagtap.pickupplay.ui.AccountFragment"
+        android:label="@string/title_account" />
 </navigation>

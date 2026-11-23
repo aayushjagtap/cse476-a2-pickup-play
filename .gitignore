@@ -8,3 +8,12 @@
 /captures/
 .externalNativeBuild/
 .cxx/
+
+# A4 Phase 2: Firebase project config, downloaded from the Firebase console. Kept out of the
+# public repository; each developer/grader build adds its own copy.
+/app/google-services.json
+# Firebase emulator / test tooling output
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+/firebase-tests/node_modules/

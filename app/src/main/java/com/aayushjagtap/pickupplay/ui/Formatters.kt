@@ -3,6 +3,7 @@ package com.aayushjagtap.pickupplay.ui
 import android.content.Context
 import com.aayushjagtap.pickupplay.R
 import com.aayushjagtap.pickupplay.data.PickupSession
+import com.aayushjagtap.pickupplay.data.SyncState
 
 /** Shared text formatting so the list and detail screens describe sessions the same way. */
 fun PickupSession.whenText(context: Context): String = context.getString(
@@ -20,4 +21,13 @@ fun PickupSession.badgeText(context: Context): String? = when {
     isJoined -> context.getString(R.string.badge_joined)
     isFull -> context.getString(R.string.badge_full)
     else -> null
+}
+
+/** A4: cloud status of a user-created or downloaded session; null for local sample sessions. */
+fun PickupSession.syncText(context: Context): String? = when (syncState) {
+    SyncState.LOCAL -> null
+    SyncState.PENDING -> context.getString(R.string.sync_pending)
+    SyncState.UPLOADING -> context.getString(R.string.sync_uploading)
+    SyncState.FAILED -> context.getString(R.string.sync_failed)
+    SyncState.SYNCED -> context.getString(R.string.sync_synced)
 }

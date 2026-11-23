@@ -1,0 +1,41 @@
+{
+  "team": ["Youssef Rmadi", "Tristan Stanton", "Mohammed Muridi", "Aayush Jagtap", "Evan Wiggins"],
+  "repo": "github.com/aayushjagtap/cse476-a2-pickup-play",
+  "firebase_project": "pickup-play-cse476",
+  "apk_name": "PickupPlay-A4.apk",
+  "date": "November 23, 2026",
+  "tests": [
+    ["Unit tests: Room persistence (4), migration v1→2 (2), sync logic (11)", "JVM / Robolectric; sync tests use a MOCKED remote", "final", "17 / 17 passed"],
+    ["firestore.rules: 19 allow/deny cases", "Firestore emulator (real rules engine)", "final rules", "19 / 19 passed"],
+    ["Deployed rules, REST probes", "LIVE pickup-play-cse476", "final rules", "signed-in read 200; no token 403; invalid token 401; impersonation, bad field, client timestamp, other collection all 403"],
+    ["A4 local persistence (process killed and relaunched twice)", "Android emulator, no backend", "final", "31 / 31 passed"],
+    ["A2 UI suite (4 display configs + rotation)", "Android emulator", "final", "70 passed, 0 failed; stopped during the last section (tablet rotation) to free the device"],
+    ["A3 location suite", "Android emulator", "final", "27 passed, 1 failed (timing check that fails the same way on unmodified main)"],
+    ["Cloud end-to-end (auth, upload, restart, clear data + restore, offline, server stopped)", "Firebase Emulator Suite + real Android SDKs", "final", "34 passed, 1 failed: the new rotation check read the status without scrolling, and in landscape it is below the fold. Re-checked by scrolling on the real-Firebase build: signed-in state and status were preserved through landscape and back; the check now scrolls."],
+    ["LIVE end-to-end (graded APK)", "LIVE pickup-play-cse476", "final", "36 passed, 3 failed (all in the simulated-outage step; see below)"]
+  ],
+  "live_evidence": [
+    "Real Firebase Auth: the grading account signed in; a wrong password was rejected with “Wrong email or password”.",
+    "Upload: session “Live check 7365bb” was created in the app; production Firestore then held exactly one document, sessions/223d6ccd-99d5-4b29-b72d-b131513454d5, whose ownerUid is the grading account's UID (checked with an authenticated REST read, independent of the app).",
+    "Later app session: after a full restart the app was still signed in and both the startup and the manual Source.SERVER reads succeeded.",
+    "Restore: after clearing the app's storage the session was gone locally; after signing in again the Source.SERVER read added it back and it was listed as “Synced to cloud” (Figure 2).",
+    "No duplicates: a further restart and sync reported “New on this device: 0”, the list showed one card and Firestore one document.",
+    "Offline (airplane mode): the app launched and worked from Room; a session created offline was marked “Not synced” with “No internet connection”; after reconnecting, Sync now uploaded it and Firestore held it exactly once.",
+    "Unauthenticated access: REST read without a token 403 PERMISSION_DENIED, with an invalid token 401, and the in-app signed-out read was denied (Figure 2)."
+  ],
+  "evidence_images": ["docs/images/live_restored_from_firestore.png", "docs/images/live_unauthenticated_denied.png"],
+  "not_verified": [
+    "Live outage (scenario B against production): the outage was simulated by breaking DNS on the emulator, which only took effect after the first upload had already succeeded. That session is in Firestore exactly once, so the app's “saved to the cloud” message was correct. Once the outage was active, the manual sync failed cleanly (“Couldn't reach the cloud server”, no spinner left). Creating a session while the production backend is unreachable was therefore not shown live; it is covered by the emulator suite, where the server process is stopped.",
+    "A2 suite on the final code: the tablet rotation section did not complete (the suite passed 76 / 76 on the Phase 1 code).",
+    "A3 suite: one timing-sensitive check fails on this slow local emulator; the same check fails on the unmodified main branch.",
+    "UI responsiveness was not measured with a profiler. Evidence: all database and network work runs in coroutines off the main thread, every cloud call has a time limit, no ANR or crash appeared in logcat in any run, and the UI tests kept navigating while uploads were in progress.",
+    "The corrected Account-rotation check (now scrolling) was verified manually on the graded build but the full emulator cloud suite was not re-run after that one-line test fix.",
+    "Only tested on the Android emulator (API 37); no physical device.",
+    "Out of scope by design: join/leave and the 9 sample sessions are not synchronised; signing out does not wipe Firestore's local cache (the app never reads it); a sync reads the newest 200 sessions."
+  ],
+  "ai_disclosure": [
+    "<b>Claude Code</b> (Anthropic, model Claude Opus 5.5) was used as a coding assistant for A4 under a team member's direction. It implemented the Phase 1 Room persistence and the Phase 2 Firebase Authentication / Cloud Firestore integration, the Firestore security rules, the unit, rules and device test scripts and CI changes, docs/A4_CLOUD.md and this document (including the diagram), and it ran the builds and tests reported in Section 8. A team member reviewed each phase, chose the scope, set up the Firebase project and grading account, and approved the rules deployment.",
+    "<b>ChatGPT</b> (OpenAI) helped the team organise the A4 work into steps and phases.",
+    "All test results in this document come from actual runs; nothing was estimated or invented. Limitations are listed in Section 8."
+  ]
+}

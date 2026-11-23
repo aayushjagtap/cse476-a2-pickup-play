@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "emulator" build type only (automated tests): allows plain HTTP to the local Firebase
+     Emulator Suite (see res/xml/network_security_config.xml). The debug and release builds keep
+     Android's default, which blocks all cleartext traffic, so Firebase is reached over HTTPS only. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:networkSecurityConfig="@xml/network_security_config" />
+</manifest>

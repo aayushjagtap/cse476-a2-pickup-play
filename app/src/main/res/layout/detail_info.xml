@@ -45,6 +45,13 @@
         app:trackThickness="@dimen/progress_thickness"
         app:trackCornerRadius="@dimen/space_xs" />
 
+    <!-- A4: cloud status (hidden for local sample sessions). -->
+    <TextView
+        android:id="@+id/detail_sync_label"
+        style="@style/DetailLabel"
+        android:text="@string/label_cloud" />
+    <TextView android:id="@+id/detail_sync" style="@style/DetailValue" />
+
     <TextView
         android:id="@+id/detail_notes_label"
         style="@style/DetailLabel"

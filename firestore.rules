@@ -1,0 +1,58 @@
+rules_version = '2';
+
+// Pickup Play (CSE 476 A4) Cloud Firestore security rules.
+//
+// - Nothing is public: every read and write requires a signed-in Firebase Auth user.
+// - Signed-in users can read pickup sessions (they are shared games, like a public board for
+//   members), but can only create sessions owned by their own UID and only change their own.
+// - Every write is validated: exact field set, types, enum values and length limits that match
+//   the app (RemoteSession.kt and the create form).
+// - Anything not matched below (any other collection) is denied by default.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isValidSession(d) {
+      let fields = ['ownerUid', 'sport', 'title', 'location', 'day', 'timeSlot', 'skill',
+                    'maxPlayers', 'playerCount', 'hostName', 'notes', 'createdAt',
+                    'serverCreatedAt', 'schemaVersion'];
+      return d.keys().hasOnly(fields) && d.keys().hasAll(fields)
+        // The owner is always the caller: nobody can create or move a session to another UID.
+        && d.ownerUid == request.auth.uid
+        && d.sport in ['BASKETBALL', 'SOCCER', 'VOLLEYBALL', 'TENNIS', 'ULTIMATE', 'PICKLEBALL']
+        && d.title is string && d.title.size() >= 1 && d.title.size() <= 60
+        && d.location is string && d.location.size() >= 1 && d.location.size() <= 80
+        && d.day in ['TODAY', 'TOMORROW', 'SATURDAY', 'SUNDAY']
+        && d.timeSlot in ['MORNING', 'AFTERNOON', 'EVENING']
+        && d.skill in ['CASUAL', 'INTERMEDIATE', 'COMPETITIVE']
+        && d.maxPlayers is int && d.maxPlayers >= 2 && d.maxPlayers <= 30
+        && d.playerCount is int && d.playerCount >= 1 && d.playerCount <= d.maxPlayers
+        && d.hostName is string && d.hostName.size() >= 1 && d.hostName.size() <= 40
+        && d.notes is string && d.notes.size() <= 300
+        && d.createdAt is int && d.createdAt > 0
+        // Must be FieldValue.serverTimestamp(): clients cannot backdate documents.
+        && d.serverCreatedAt == request.time
+        && d.schemaVersion == 1;
+    }
+
+    match /sessions/{sessionId} {
+      allow get, list: if signedIn();
+
+      allow create: if signedIn()
+        && sessionId.size() >= 8 && sessionId.size() <= 64
+        && isValidSession(request.resource.data);
+
+      // Re-uploading (an idempotent retry of set()) is allowed only for the session's own host,
+      // who can never hand it to another UID (isValidSession requires ownerUid == caller).
+      allow update: if signedIn()
+        && resource.data.ownerUid == request.auth.uid
+        && isValidSession(request.resource.data);
+
+      // The app never deletes cloud sessions.
+      allow delete: if false;
+    }
+  }
+}

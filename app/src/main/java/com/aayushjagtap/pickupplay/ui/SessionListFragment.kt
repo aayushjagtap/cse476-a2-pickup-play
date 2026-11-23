@@ -340,6 +340,10 @@ class SessionListFragment : Fragment() {
                 sessionBadge.text = badge
                 sessionBadge.isVisible = badge != null
 
+                val sync = session.syncText(ctx)
+                sessionSync.text = sync
+                sessionSync.isVisible = sync != null
+
                 val distance = distanceText(ctx, ranked)
                 sessionDistance.text = distance
                 sessionDistance.isVisible = distance != null
@@ -347,7 +351,7 @@ class SessionListFragment : Fragment() {
                 root.contentDescription = ctx.getString(
                     R.string.cd_session_card, session.title, session.location,
                     session.whenText(ctx), session.playersText(ctx),
-                ) + (distance?.let { ", $it" } ?: "")
+                ) + (distance?.let { ", $it" } ?: "") + (sync?.let { ", $it" } ?: "")
                 root.setOnClickListener { onClick(session) }
             }
         }

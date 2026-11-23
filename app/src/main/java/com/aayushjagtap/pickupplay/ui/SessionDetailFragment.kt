@@ -55,6 +55,10 @@ class SessionDetailFragment : Fragment() {
             detailNotes.text = s.notes
             detailNotes.isVisible = s.notes.isNotBlank()
             detailNotesLabel.isVisible = s.notes.isNotBlank()
+            val sync = s.syncText(ctx)
+            detailSync.text = sync
+            detailSync.isVisible = sync != null
+            detailSyncLabel.isVisible = sync != null
         }
 
         // Status message and button reflect the user's relationship to the session.

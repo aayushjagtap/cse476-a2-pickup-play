@@ -75,6 +75,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- A4: cloud status for sessions the user created (hidden for sample sessions). -->
+        <TextView
+            android:id="@+id/session_sync"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceLabelMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/session_distance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <TextView
             android:id="@+id/session_skill"
             android:layout_width="wrap_content"
@@ -85,7 +99,7 @@
             android:textColor="?attr/colorPrimary"
             app:layout_constrainedWidth="true"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/session_distance"
+            app:layout_constraintTop_toBottomOf="@id/session_sync"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/session_players" />
 
